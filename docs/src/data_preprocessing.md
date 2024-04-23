@@ -8,17 +8,17 @@ Open `src/data_preprocessing.py` code and set: `DATA_FILE_PATH`, `DATA_DIRECTORY
 cd src
 ```
 
-3. **Activate the Virtual Environment**
-   - **On Windows:**
+3. **Activate the virtual environment**
+   - **Windows:**
      ```cmd
      myenv\Scripts\activate
      ```
-   - **On Linux or macOS:**
+   - **Linux or MacOS:**
      ```bash
      source myenv/bin/activate
      ```
 
-4. **run the script**
+4. **Run script**
 ```bash
 python data_preprocessing.py
 ```
