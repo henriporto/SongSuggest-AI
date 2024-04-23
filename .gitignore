@@ -1,0 +1,15 @@
+# Python virtual environments
+venv/
+myenv/
+.env
+
+# Dataset files
+*.csv
+*.xls
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
