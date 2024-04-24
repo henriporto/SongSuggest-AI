@@ -49,6 +49,13 @@ Ensure that you are in the project's root directory before executing this comman
    python -m pip install -r requirements.txt
    ```
 
+4. **Download Dataset:**
+   To use the Genius Song Lyrics Dataset, follow these steps:
+   - **Step 1:** Login to your Kaggle account or create one.
+   - **Step 2:** Go to: [Genius Song Lyrics Dataset](https://www.kaggle.com/datasets/carlosgdcj/genius-song-lyrics-with-language-information).
+   - **Step 3:** Click on the "Download" button (approximately 3 GB).
+   - **Step 4:** Extract `song_lyrics.csv` from the downloaded `.zip` into the `data` directory.
+
 ## Directory Structure
 
 - `/data`: Stores datasets and scripts.
