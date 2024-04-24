@@ -59,13 +59,13 @@ class DataPreprocessor:
             text = re.sub(r"\n+", '\n', text)
 
             # replace new lines and other special characters with a space
-            #text = re.sub(r"\n", ' [BRK] ', text) #TODO verify the need
+            # text = re.sub(r"\n", ' [BRK] ', text) #TODO verify the need
+
+            # remove any non-alphanumeric characters (keeping spaces, basic punctuation, and newlines)
+            text = re.sub(r"[^a-zA-Z0-9 ,.!?'\n\"]", ' ', text)
 
             # remove any extra spaces
             text = re.sub(r'(?<!\n)\s+(?!\n)', ' ', text).strip()
-
-            # remove any non-alphanumeric characters (keeping spaces, basic punctuation, and newlines)
-            text = re.sub(r"[^a-zA-Z0-9 ,.!?'\n]", ' ', text)
 
             return text
 
