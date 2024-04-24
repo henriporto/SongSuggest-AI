@@ -4,10 +4,7 @@ import pandas as pd
 import re
 import sys
 import uuid
-
-# File paths
-DATA_FILE_PATH = '../data/song_lyrics.csv'
-DATA_DIRECTORY = '../data/'
+from utils import DATASET_FILE_PATH, DATA_DIRECTORY
 
 # Data columns
 COLUMNS_TO_NORMALIZE = ['title', 'artist', 'lyrics', 'features', 'tag']
@@ -35,6 +32,12 @@ class DataPreprocessor:
         self.data.dropna(inplace=True)
         print("Missing values dropped.")
 
+    def drop_same_id(self):
+        """ Remove rows with the same number in 'id' column """
+        drops = 0
+        # TODO
+        print(drops)
+
     def filter_english_songs(self):
         """ Keep only English songs based on language fields. """
         self.data = self.data[
@@ -44,8 +47,26 @@ class DataPreprocessor:
 
     def normalize_text(self, column):
         """ Normalize text data. """
-        self.data[column] = self.data[column].str.lower()
-        self.data[column] = self.data[column].apply(lambda x: re.sub(r'\s+', ' ', x).strip())
+
+        def clean_text(text):
+            # remove bracketed sections like [Hook] or [Verse]
+            text = re.sub(r"\[.*?\]", '', text)
+
+            # replace new lines and other special characters with a space
+            #text = re.sub(r"\n", ' [BRK] ', text) #TODO verify the need
+
+            # remove any non-alphanumeric characters (keeping spaces and basic punctuation)
+            text = re.sub(r"[^a-zA-Z0-9 ,.!?']", ' ', text)
+
+            # convert to lowercase
+            text = text.lower()
+
+            # remove any extra spaces
+            text = re.sub(r"\s+", ' ', text).strip()
+
+            return text
+
+        self.data[column] = self.data[column].apply(clean_text)
         print(f"Text in column '{column}' normalized.")
 
     def preprocess(self):
@@ -64,7 +85,7 @@ class DataPreprocessor:
         self.data.to_csv(output_path, index=False)
 
 if __name__ == "__main__":
-    file_path = DATA_FILE_PATH
+    file_path = DATASET_FILE_PATH
     output_path = f'{DATA_DIRECTORY}cleaned_dataset_{str(uuid.uuid4())}.csv'
     preprocessor = DataPreprocessor(file_path, COLUMNS_TO_NORMALIZE)
     try:
