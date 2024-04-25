@@ -16,14 +16,15 @@ class DataPreprocessor:
         Conversion to lowercase
         Elimination of extra spaces
     """
-    def __init__(self, file_path, columns_to_normalize, language_fields):
+    def __init__(self, file_path, columns_to_normalize, chunk_size=5000):
         self.file_path = file_path
         self.columns_to_normalize = columns_to_normalize
-        self.language_fields = language_fields
+        self.chunk_size = chunk_size
         self.data = None
 
     def load_data(self):
         """ Load data from a CSV file. """
+        print("Start data load.")
         self.data = pd.read_csv(self.file_path)
         print("Data loaded successfully.")
 
@@ -33,10 +34,12 @@ class DataPreprocessor:
         print("Missing values dropped.")
 
     def drop_same_id(self):
-        """ Remove rows with the same number in 'id' column """
-        drops = 0
-        # TODO
-        print(drops)
+        """ Remove rows with duplicate 'id' column values. """
+        initial_count = len(self.data)
+        self.data = self.data.drop_duplicates(subset='id', keep='first')
+        final_count = len(self.data)
+        drops = initial_count - final_count
+        print(f"Duplicates IDs dropped: {drops}")
 
     def filter_english_songs(self):
         """ Keep only English songs based on language fields. """
@@ -58,14 +61,14 @@ class DataPreprocessor:
             # collapse multiple consecutive newline characters into a single newline
             text = re.sub(r"\n+", '\n', text)
 
-            # replace new lines and other special characters with a space
-            # text = re.sub(r"\n", ' [BRK] ', text) #TODO verify the need
-
             # remove any non-alphanumeric characters (keeping spaces, basic punctuation, and newlines)
             text = re.sub(r"[^a-zA-Z0-9 ,.!?'\n\"]", ' ', text)
 
             # remove any extra spaces
-            text = re.sub(r'(?<!\n)\s+(?!\n)', ' ', text).strip()
+            text = re.sub(r'[^\S\n]+', ' ', text).strip()
+
+            #TODO verify the need
+            # text = re.sub(r"\n", ' [BRK] ', text)
 
             return text
 
@@ -86,6 +89,7 @@ class DataPreprocessor:
     def save_clean_data(self, output_path):
         """ Save the cleaned data to a new CSV. """
         self.data.to_csv(output_path, index=False)
+        print(f"Data saved to: '{output_path}'.")
 
 if __name__ == "__main__":
     file_path = DATASET_FILE_PATH
