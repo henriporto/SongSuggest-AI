@@ -16,10 +16,9 @@ class DataPreprocessor:
         Conversion to lowercase
         Elimination of extra spaces
     """
-    def __init__(self, file_path, columns_to_normalize, chunk_size=5000):
+    def __init__(self, file_path, columns_to_normalize):
         self.file_path = file_path
         self.columns_to_normalize = columns_to_normalize
-        self.chunk_size = chunk_size
         self.data = None
 
     def load_data(self):
@@ -79,6 +78,7 @@ class DataPreprocessor:
         """ Run all preprocessing steps. """
         self.load_data()
         self.drop_missing_values()
+        self.drop_same_id()
         self.filter_english_songs()
 
         for column in self.columns_to_normalize:
